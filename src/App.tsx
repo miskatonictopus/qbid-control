@@ -1,13 +1,15 @@
-import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/Login"; // 👈 asegúrate de que la ruta es correcta
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-        ¡Hola, mundo!
-      </h1>
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/Login" element={<LoginPage />} />
+        {/* Aquí puedes añadir más rutas en el futuro */}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
