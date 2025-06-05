@@ -4,39 +4,27 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { loginToSBid } from "@/lib/api" // Este es un wrapper
+
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("")
+  const [dni, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [message, setMessage] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setMessage("Conectando...")
-
+  
     try {
-      const response = await fetch("https://www.empresaiformacio.org/sBid", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const result = await response.json()
-
-      if (response.ok && result.status === "ok") {
-        setMessage("✅ Conexión correcta")
-        // Aquí puedes redirigir, guardar token, etc.
-      } else {
-        setMessage("❌ Error de autenticación o respuesta inválida")
-      }
-    } catch (error) {
-      setMessage("❌ No se pudo conectar con el servidor")
-      console.error(error)
+      const success = await loginToSBid(dni, password)
+      setMessage(success ? "✅ Login correcto" : "❌ Usuario o contraseña incorrectos")
+    } catch (err) {
+      setMessage("❌ Error de conexión")
+      console.error(err)
     }
   }
 
@@ -54,12 +42,12 @@ export function LoginForm({
 
           {/* campos */}
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="dni">dni</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="usuario@empresa.com"
-              value={email}
+              id="dni"
+              type="text"
+              placeholder="XXXXXXXXX"
+              value={dni}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
